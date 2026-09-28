@@ -1,23 +1,27 @@
 from model.creature import Creature
 
-#fake data , replaced in the future by a real database and SQL
+# fake data , replaced in the future by a real database and SQL
 _creatures = [
     Creature(
         name="Yeti",
         aka="Abominable Snowman",
         country="CN",
         area="Himalayas",
-        description="Hirsute Himalayan"),
+        description="Hirsute Himalayan",
+    ),
     Creature(
         name="Bigfoot",
         description="Yeti's Cousin Eddie",
         country="US",
         area="*",
-        aka="Sasquatch")
+        aka="Sasquatch",
+    ),
 ]
 
-def get_all() ->list[Creature]:
+
+def get_all() -> list[Creature]:
     return _creatures
+
 
 def get_one(name: str) -> Creature | None:
     for _creature in _creatures:
@@ -25,14 +29,21 @@ def get_one(name: str) -> Creature | None:
             return _creature
     return None
 
-def  create(creature: Creature) -> Creature:
+
+def create(creature: Creature) -> Creature:
     return creature
+
 
 def modify(creature: Creature) -> Creature:
     return creature
 
+
 def replace(creature: Creature) -> Creature:
     return creature
 
-def delete(name: str) -> bool | None:
-    return None
+
+def delete(name: str) -> bool:
+    for _creature in _creatures:
+        if _creature.name == name:
+            return True
+    return False
