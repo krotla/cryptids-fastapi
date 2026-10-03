@@ -1,4 +1,4 @@
-import fake.explorer as data
+import data.explorer as data
 from model.explorer import Explorer
 
 
@@ -11,16 +11,19 @@ def get_one(name: str) -> Explorer | None:
 
 
 def create(explorer: Explorer) -> Explorer:
-    return data.create(explorer)
+    with data.transaction:
+        return data.create(explorer)
 
 
 def replace(explorer: Explorer) -> Explorer:
     return data.replace(explorer)
 
 
-def modify(explorer: Explorer) -> Explorer:
-    return data.modify(explorer)
+def modify(name: str, explorer: Explorer) -> Explorer:
+    with data.transaction:
+        return data.modify(name, explorer)
 
 
 def delete(name: str) -> bool:
-    return data.delete(name)
+    with data.transaction:
+        return data.delete(name)

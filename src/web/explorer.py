@@ -1,11 +1,13 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, status
 
-import fake.explorer as service
+import service.explorer as service
+from error import Duplicate, Missing
 from model.explorer import Explorer
 
 router = APIRouter(prefix="/explorer")
 
 
+@router.get("")
 @router.get("/")
 def get_all() -> list[Explorer]:
     return service.get_all()
@@ -13,20 +15,31 @@ def get_all() -> list[Explorer]:
 
 @router.get("/{name}")
 def get_one(name) -> Explorer | None:
-    return service.get_one(name)
+    try:
+        return service.get_one(name)
+    except Missing as ex:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ex.msg)
 
 
-# all the remaining endpoints do nothing yet:
-@router.post("/")
+@router.post("", status_code=status.HTTP_201_CREATED)
+@router.post("/", status_code=status.HTTP_201_CREATED)
 def create(explorer: Explorer) -> Explorer:
-    return service.create(explorer)
+    try:
+        return service.create(explorer)
+    except Duplicate as ex:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ex.msg)
 
 
+@router.patch("")
 @router.patch("/")
-def modify(explorer: Explorer) -> Explorer:
-    return service.modify(explorer)
+def modify(name: str, explorer: Explorer) -> Explorer:
+    try:
+        return service.modify(name, explorer)
+    except Missing as ex:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ex.msg)
 
 
+@router.put("")
 @router.put("/")
 def replace(explorer: Explorer) -> Explorer:
     return service.replace(explorer)
@@ -34,4 +47,7 @@ def replace(explorer: Explorer) -> Explorer:
 
 @router.delete("/{name}")
 def delete(name: str) -> bool:
-    return service.delete(name)
+    try:
+        return service.delete(name)
+    except Missing as ex:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ex.msg)

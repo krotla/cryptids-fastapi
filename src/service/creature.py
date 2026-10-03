@@ -1,4 +1,4 @@
-import fake.creature as data
+import data.creature as data
 from model.creature import Creature
 
 
@@ -11,16 +11,19 @@ def get_one(name: str) -> Creature | None:
 
 
 def create(creature: Creature) -> Creature:
-    return data.create(creature)
+    with data.transaction:
+        return data.create(creature)
 
 
 def replace(creature: Creature) -> Creature:
     return data.replace(creature)
 
 
-def modify(creature: Creature) -> Creature:
-    return data.modify(creature)
+def modify(name: str, creature: Creature) -> Creature:
+    with data.transaction:
+        return data.modify(name, creature)
 
 
 def delete(name: str) -> bool:
-    return data.delete(name)
+    with data.transaction:
+        return data.delete(name)

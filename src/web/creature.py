@@ -1,11 +1,13 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, status
 
-import fake.creature as service
+import service.creature as service
+from error import Duplicate, Missing
 from model.creature import Creature
 
 router = APIRouter(prefix="/creature")
 
 
+@router.get("")
 @router.get("/")
 def get_all() -> list[Creature]:
     return service.get_all()
@@ -13,20 +15,32 @@ def get_all() -> list[Creature]:
 
 @router.get("/{name}")
 def get_one(name) -> Creature | None:
-    return service.get_one(name)
+    try:
+        return service.get_one(name)
+    except Missing as ex:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ex.msg)
 
 
 # all the remaining endpoints do nothing yet:
-@router.post("/")
+@router.post("", status_code=status.HTTP_201_CREATED)
+@router.post("/", status_code=status.HTTP_201_CREATED)
 def create(creature: Creature) -> Creature:
-    return service.create(creature)
+    try:
+        return service.create(creature)
+    except Duplicate as ex:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ex.msg)
 
 
+@router.patch("")
 @router.patch("/")
-def modify(creature: Creature) -> Creature:
-    return service.modify(creature)
+def modify(name: str, creature: Creature) -> Creature:
+    try:
+        return service.modify(name, creature)
+    except Missing as ex:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ex.msg)
 
 
+@router.put("")
 @router.put("/")
 def replace(creature: Creature) -> Creature:
     return service.replace(creature)
@@ -34,4 +48,7 @@ def replace(creature: Creature) -> Creature:
 
 @router.delete("/{name}")
 def delete(name: str):
-    return service.delete(name)
+    try:
+        return service.delete(name)
+    except Missing as ex:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ex.msg)
