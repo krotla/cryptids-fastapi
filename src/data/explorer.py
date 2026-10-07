@@ -1,7 +1,11 @@
 from error import Duplicate, Missing
 from model.explorer import Explorer
 
-from .init import IntegrityError, curs, transaction
+from .init import (
+    IntegrityError,
+    curs,
+    transaction,  # noqa: F401
+)
 
 curs.execute(
     """create table if not exists explorer(

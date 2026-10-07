@@ -2,7 +2,12 @@
 
 import os
 from pathlib import Path
-from sqlite3 import Connection, Cursor, IntegrityError, connect
+from sqlite3 import (
+    Connection,
+    Cursor,
+    IntegrityError,  # noqa: F401
+    connect,
+)
 
 conn: Connection | None = None
 curs: Cursor

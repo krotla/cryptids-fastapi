@@ -1,7 +1,11 @@
 from error import Duplicate, Missing
 from model.creature import Creature
 
-from .init import IntegrityError, curs, transaction
+from .init import (
+    IntegrityError,
+    curs,
+    transaction,  # noqa: F401
+)
 
 curs.execute(
     """create table if not exists creature(
@@ -52,7 +56,7 @@ def create(creature: Creature) -> Creature:
     params = model_to_dict(creature)
     try:
         curs.execute(query, params)
-    except IntegrityError as ex:
+    except IntegrityError:
         raise Duplicate(f"Creature {creature.name} already exists!")
     return get_one(creature.name)
 
