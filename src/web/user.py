@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 from error import Duplicate, Missing, WrongPassword
-from model.user import User
+from model.user import User, UserCreate
 from service import user as service
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
@@ -67,7 +67,7 @@ def get_one(name) -> User:
 
 @router.post("", status_code=201)
 @router.post("/", status_code=201)
-def create(user: User) -> User:
+def create(user: UserCreate) -> User:
     try:
         return service.create(user)
     except Duplicate as exc:

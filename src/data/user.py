@@ -28,8 +28,8 @@ def model_to_dict(user: User) -> dict:
     return user.model_dump()
 
 
-def get_one(name: str) -> User:
-    query = """select * from user
+def get_one(name: str, table: str = "user") -> User:
+    query = f"""select * from {table}
                 where name=:name"""
     params = {"name": name}
     curs.execute(query, params)
@@ -55,7 +55,7 @@ def create(user: User, table: str = "user") -> User:
         curs.execute(query, params)
     except IntegrityError:
         raise Duplicate(f"User {user.name} already exist!")
-    return get_one(user.name)
+    return get_one(user.name, table)
 
 
 def modify(name: str, user: User) -> User:
