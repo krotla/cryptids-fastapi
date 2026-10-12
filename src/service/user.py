@@ -3,7 +3,7 @@ from datetime import UTC, datetime, timedelta
 
 from jose import jwt
 
-from model.user import User
+from model.user import User, UserCreate
 
 if os.getenv("CRYPTID_UNIT_TEST"):
     from fake import user as data
@@ -18,6 +18,11 @@ from error import WrongPassword
 SECRET_KEY = "keep-it-secret"
 ALGORITHM = "HS256"
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+
+def hash_password(password: str) -> str:
+    """Generates a secure hash from plain text."""
+    return pwd_context.hash(password)
 
 
 def verify_password(plain: str, hash: str) -> bool:
@@ -85,8 +90,9 @@ def get_one(name) -> User:
     return data.get_one(name)
 
 
-def create(user: User) -> User:
-    return data.create(user)
+def create(user: UserCreate) -> User:
+    hashed_password: str = hash_password(user.password)
+    return data.create(User(name=user.name, hash=hashed_password))
 
 
 def modify(name: str, user: User) -> User:
