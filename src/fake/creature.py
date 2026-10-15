@@ -38,10 +38,6 @@ def modify(creature: Creature) -> Creature:
     return creature
 
 
-def replace(creature: Creature) -> Creature:
-    return creature
-
-
 def delete(name: str) -> bool:
     for _creature in _creatures:
         if _creature.name == name:

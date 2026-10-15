@@ -15,10 +15,6 @@ def create(creature: Creature) -> Creature:
         return data.create(creature)
 
 
-def replace(creature: Creature) -> Creature:
-    return data.replace(creature)
-
-
 def modify(name: str, creature: Creature) -> Creature:
     with data.transaction:
         return data.modify(name, creature)

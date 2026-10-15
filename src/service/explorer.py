@@ -15,10 +15,6 @@ def create(explorer: Explorer) -> Explorer:
         return data.create(explorer)
 
 
-def replace(explorer: Explorer) -> Explorer:
-    return data.replace(explorer)
-
-
 def modify(name: str, explorer: Explorer) -> Explorer:
     with data.transaction:
         return data.modify(name, explorer)

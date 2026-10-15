@@ -26,10 +26,6 @@ def modify(explorer: Explorer) -> Explorer:
     return explorer
 
 
-def replace(explorer: Explorer) -> Explorer:
-    return explorer
-
-
 def delete(name: str) -> bool:
     for _explorer in _explorers:
         if _explorer.name == name:

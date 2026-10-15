@@ -40,12 +40,6 @@ def modify(name: str, creature: Creature) -> Creature:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ex.msg)
 
 
-@router.put("")
-@router.put("/")
-def replace(creature: Creature) -> Creature:
-    return service.replace(creature)
-
-
 @router.delete("/{name}")
 def delete(name: str):
     try:

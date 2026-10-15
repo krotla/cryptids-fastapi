@@ -39,12 +39,6 @@ def modify(name: str, explorer: Explorer) -> Explorer:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ex.msg)
 
 
-@router.put("")
-@router.put("/")
-def replace(explorer: Explorer) -> Explorer:
-    return service.replace(explorer)
-
-
 @router.delete("/{name}")
 def delete(name: str) -> bool:
     try:
