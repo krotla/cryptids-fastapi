@@ -1,6 +1,11 @@
+import os
+
 from fastapi import APIRouter, HTTPException, status
 
-import service.explorer as service
+if os.getenv("CRYPTID_UNIT_TEST"):
+    from fake import explorer as service
+else:
+    from service import explorer as service
 from error import Duplicate, Missing
 from model.explorer import Explorer
 
@@ -27,7 +32,7 @@ def create(explorer: Explorer) -> Explorer:
     try:
         return service.create(explorer)
     except Duplicate as ex:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ex.msg)
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=ex.msg)
 
 
 @router.patch("")
@@ -40,7 +45,7 @@ def modify(name: str, explorer: Explorer) -> Explorer:
 
 
 @router.delete("/{name}")
-def delete(name: str) -> bool:
+def delete(name: str):
     try:
         return service.delete(name)
     except Missing as ex:
