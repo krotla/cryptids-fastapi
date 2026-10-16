@@ -11,12 +11,14 @@ def find[T: HasName](fakes: list[T], name: str) -> T:
     for fake in fakes:
         if fake.name == name:
             return fake
-    raise Missing(msg=f"Creature {name} not found!")
+    class_name = type(fakes[0]).__name__ if fakes else "Item"
+    raise Missing(msg=f"{class_name} {name} not found!")
 
 
 def check_duplicate[T: HasName](fakes: list[T], name: str):
     try:
         find(fakes, name)
-        raise Duplicate(msg=f"Creature {name} already exists!")
+        class_name = type(fakes[0]).__name__ if fakes else "Item"
+        raise Duplicate(msg=f"{class_name} {name} already exists!")
     except Missing:
         pass
