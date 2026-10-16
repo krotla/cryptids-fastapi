@@ -1,6 +1,11 @@
+import os
+
 from fastapi import APIRouter, HTTPException, status
 
-import service.creature as service
+if os.getenv("CRYPTID_UNIT_TEST"):
+    from fake import creature as service
+else:
+    from service import creature as service
 from error import Duplicate, Missing
 from model.creature import Creature
 
@@ -28,7 +33,7 @@ def create(creature: Creature) -> Creature:
     try:
         return service.create(creature)
     except Duplicate as ex:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ex.msg)
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=ex.msg)
 
 
 @router.patch("")
