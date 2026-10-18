@@ -1,3 +1,5 @@
+from contextlib import nullcontext
+
 from model.creature import Creature
 
 from .common import check_duplicate, find
@@ -19,6 +21,8 @@ _creatures = [
         aka="Sasquatch",
     ),
 ]
+
+transaction = nullcontext()
 
 
 def get_all() -> list[Creature]:

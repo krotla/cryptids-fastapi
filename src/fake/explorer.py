@@ -1,3 +1,5 @@
+from contextlib import nullcontext
+
 from model.explorer import Explorer
 
 from .common import check_duplicate, find
@@ -15,6 +17,8 @@ _explorers = [
         description="Myopic machete man",
     ),
 ]
+
+transaction = nullcontext()
 
 
 def get_all() -> list[Explorer]:

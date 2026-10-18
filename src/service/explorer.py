@@ -1,5 +1,11 @@
-import data.explorer as data
+import os
+
 from model.explorer import Explorer
+
+if os.getenv("CRYPTID_UNIT_TEST"):
+    from fake import explorer as data
+else:
+    from data import explorer as data
 
 
 def get_all() -> list[Explorer]:
@@ -20,6 +26,6 @@ def modify(name: str, explorer: Explorer) -> Explorer:
         return data.modify(name, explorer)
 
 
-def delete(name: str) -> bool:
+def delete(name: str) -> None:
     with data.transaction:
         return data.delete(name)
